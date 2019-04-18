@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block body %}
+    <div class="card" style="width: 18rem;">
+      <img src="{{movie.poster_url}}" class="card-img-top" alt="poster_image">
+      <div class="card-body">
+        <h5 class="card-title">{{movie.title}}</h5>
+        <p class="card-text">{{movie.description}}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">장르 : {{movie.genre_id}}</li>  
+        <li class="list-group-item">누적관객수 : {{movie.audience}}</li>
+      </ul>
+      <div class="card-body">
+        
+        <form action="{% url 'movie:score_new' movie.id %}" method='post'>
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <input type="submit"/>
+        </form>        
+        
+        {% for score in movie.score_set.all %}
+            <p>한줄평 : {{score.content}}</p>
+            <p>평  점 : {{score.score}}</p>  
+            <a href="{% url 'movie:score_delete' movie.id score.id %}">삭제</a>
+        {% endfor %}
+        
+      </div>
+      
+      <div class="container">
+          <a href="{% url 'movie:list' %}">목록</a>
+          <a href="{% url 'movie:update' movie.id %}">수정</a>
+          <a href="{% url 'movie:delete' movie.id %}">삭제</a>
+      </div>
+    </div>
+{% endblock %}
