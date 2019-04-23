@@ -6,6 +6,27 @@ from .forms import MovieForm, ScoreForm
 def list(request):
     movies = Movie.objects.all()
     return render(request, 'movie/list.html', {"movies":movies})
+    
+def new(request):
+    if request.method=="POST":
+        form = MovieForm(request.POST)
+        if form.is_valid():
+            movie = form.save()
+            return redirect('movie:detail', movie.id)
+    else:
+        form = MovieForm()
+    return render(request, 'movie/form.html', {'form':form})
+
+def edit(request,id):
+    movie = Movie.objects.get(id=id)
+    if request.method=="POST":
+        form = MovieForm(request.POST, instance=movie)
+        if form.is_valid():
+            form.save()
+            return redirect("movie:detail", movie.id)
+    else:
+        form = MovieForm(instance=movie)
+    return render(request, 'movie/form.html',{'form':form})
 
 def detail(request, id):
     movie = Movie.objects.get(id=id)

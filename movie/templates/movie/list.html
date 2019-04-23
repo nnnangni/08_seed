@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
-
+{% load bootstrap4 %}
 {% block body %}
     {% for movie in movies %}
-        {% include 'movie/_movie.html' %}
+    <div class="card my-3">
+        <div class="card-body">
+            <a href="{% url 'movie:detail' movie.id %}">{{movie.title}}</a>
+        </div>
+    </div>
     {% endfor %}
+    <button type="button" class="btn btn-link"> <a href="{% url 'movie:new' %}">영화추가</a></button>
 {% endblock %}
